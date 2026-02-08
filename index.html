@@ -1,1 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine?</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fff0f3;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* Floating Hearts Animation */
+        .heart-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -100px;
+            color: #ffb3c1;
+            animation: float 6s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            padding: 2rem;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+            max-width: 400px;
+            width: 85%;
+            transition: all 0.3s ease;
+        }
+
+        h1 { color: #ff4d6d; margin-bottom: 10px; }
+        p { color: #590d22; font-size: 1.1rem; }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            min-height: 250px; /* Room for the button to grow */
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #yesBtn { background-color: #ff4d6d; color: white; z-index: 20; }
+        #noBtn { background-color: #ffccd5; color: #ff4d6d; z-index: 15; white-space: nowrap; }
+
+        input {
+            padding: 12px;
+            border-radius: 15px;
+            border: 2px solid #ffb3c1;
+            margin-bottom: 15px;
+            width: 80%;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .hidden { display: none; }
+        .main-heart { font-size: 60px; animation: pulse 1.5s infinite; }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="heart-bg" id="heartBg"></div>
+
+    <div id="step1" class="container">
+        <div class="main-heart">💝</div>
+        <h1>Hey!</h1>
+        <p>I have a secret to tell you...</p>
+        <input type="text" id="userName" placeholder="Your beautiful name?">
+        <br>
+        <button onclick="startValentine()" style="background: #ff4d6d; color: white;">Next →</button>
+    </div>
+
+    <div id="step2" class="container hidden">
+        <div class="main-heart">💖</div>
+        <h1 id="questionTitle">Hi!</h1>
+        <p>Will you be my Valentine?</p>
+        <div class="btn-container">
+            <button id="yesBtn" onclick="showFinal()">YES! ❤️</button>
+            <button id="noBtn" onclick="shrinkNo()">No</button>
+        </div>
+    </div>
+
+    <div id="step3" class="container hidden">
+        <div class="main-heart">🎊</div>
+        <h1>I Knew It! 🥰</h1>
+        <p id="finalMsg"></p>
+        <button onclick="sendWhatsApp()" style="background: #25D366; color: white; width: 100%; font-size: 1.1rem; padding: 15px;">
+            Tell me on WhatsApp 💌
+        </button>
+    </div>
+
+    <script>
+        let userName = "";
+        let noCount = 0;
+        let yesScale = 1;
+        let noScale = 1;
+
+        // Change this to your actual WhatsApp number
+        const myPhoneNumber = "1234567890"; 
+
+        const noPhrases = [
+            "No", "Are you sure?", "Really sure??", "Think again!", 
+            "Last chance!", "Surely not?", "You're breaking my heart ;(", 
+            "I'm gonna cry...", "You're being mean!", "Okay, now you're just clicking it."
+        ];
+
+        // Background Hearts
+        const heartBg = document.getElementById('heartBg');
+        for (let i = 0; i < 15; i++) {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            heartBg.appendChild(heart);
+        }
+
+        function startValentine() {
+            userName = document.getElementById('userName').value;
+            if (!userName.trim()) return alert("Enter your name first! 😉");
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+            document.getElementById('questionTitle').innerText = `Listen, ${userName}...`;
+        }
+
+        function shrinkNo() {
+            noCount++;
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+
+            // Growth/Shrink logic
+            yesScale += 0.5;
+            noScale -= 0.1;
+
+            yesBtn.style.transform = `scale(${yesScale})`;
+            noBtn.style.transform = `scale(${noScale})`;
+
+            // Change Text
+            if (noCount < noPhrases.length) {
+                noBtn.innerText = noPhrases[noCount];
+            }
+
+            // Cover the "No" button
+            if (noCount >= 10) {
+                noBtn.style.display = 'none';
+                yesBtn.style.width = '100%';
+                yesBtn.style.padding = '40px';
+                yesBtn.innerText = "YES! (No is gone!)";
+            }
+        }
+
+        function showFinal() {
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.remove('hidden');
+            document.getElementById('finalMsg').innerText = 
+                `${userName}, you've officially agreed! Send me the message so we can celebrate.`;
+        }
+
+        function sendWhatsApp() {
+            const text = `Hey! It's ${userName}. I just wanted to say... YES! I'll be your Valentine! ❤️`;
+            window.open(`https://wa.me/${myPhoneNumber}?text=${encodeURIComponent(text)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
 
