@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Surprise for You</title>
+    <title>A Special Surprise</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -18,223 +18,171 @@
             text-align: center;
         }
 
-        /* Floating Hearts */
-        .heart-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .floating-heart {
-            position: absolute;
-            bottom: -100px;
-            color: #ffb3c1;
-            animation: float 6s linear infinite;
-        }
-
+        /* Floating Hearts Background */
+        .heart-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .floating-heart { position: absolute; bottom: -100px; color: #ffb3c1; animation: float 6s linear infinite; }
         @keyframes float {
             0% { transform: translateY(0) rotate(0deg); opacity: 1; }
             100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Container Styling */
         .container {
             position: relative;
             z-index: 10;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
             padding: 2.5rem;
             border-radius: 30px;
-            border: 2px solid white;
             box-shadow: 0 20px 50px rgba(255, 77, 109, 0.3);
-            max-width: 450px;
-            width: 85%;
-            transition: all 0.5s ease;
+            max-width: 450px; width: 85%;
         }
 
-        h1 { font-family: 'Dancing Script', cursive; color: #ff4d6d; font-size: 2.5rem; margin-bottom: 10px; }
-        p { color: #590d22; font-size: 1.1rem; }
-        .hint { font-size: 0.9rem; color: #ff758f; font-style: italic; margin-top: 10px; }
-
-        .btn-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
-            min-height: 280px;
-        }
-
-        button {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 700;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
-        }
-
-        #yesBtn { background-color: #ff4d6d; color: white; z-index: 100; }
-        #noBtn { background-color: #ffccd5; color: #ff4d6d; }
-
-        /* Shake animation for No button */
-        .shake { animation: shake 0.5s; }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        input {
-            padding: 15px;
-            border-radius: 15px;
-            border: 2px solid #ffb3c1;
-            margin-bottom: 20px;
-            width: 80%;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        input:focus { border-color: #ff4d6d; box-shadow: 0 0 10px rgba(255, 77, 109, 0.2); }
-
-        .hidden { display: none; }
-        .main-heart { font-size: 70px; animation: heartbeat 1.2s infinite; }
+        h1 { font-family: 'Dancing Script', cursive; color: #ff4d6d; font-size: 2.5rem; }
         
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            15% { transform: scale(1.3); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.15); }
-            60% { transform: scale(1); }
+        /* Hanging Photos Logic */
+        .photo-hanger {
+            display: flex;
+            justify-content: space-around;
+            position: fixed;
+            top: -500px; /* Hidden initially */
+            left: 0; width: 100%;
+            transition: top 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 20;
         }
+
+        .frame {
+            width: 140px;
+            height: 180px;
+            background: white;
+            padding: 10px;
+            border-bottom: 20px solid white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transform-origin: top center;
+            animation: sway 3s ease-in-out infinite alternate;
+            position: relative;
+        }
+
+        .frame::before { /* The String */
+            content: '';
+            position: absolute;
+            top: -200px; left: 50%;
+            width: 2px; height: 200px;
+            background: #ff4d6d;
+        }
+
+        .frame img { width: 100%; height: 100%; object-fit: cover; }
+
+        @keyframes sway {
+            0% { transform: rotate(-5deg); }
+            100% { transform: rotate(5deg); }
+        }
+
+        .btn-container { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 20px; min-height: 200px; }
+        button { padding: 12px 30px; border: none; border-radius: 50px; cursor: pointer; font-weight: 700; transition: 0.3s; }
+        #yesBtn { background-color: #ff4d6d; color: white; }
+        #noBtn { background-color: #ffccd5; color: #ff4d6d; }
+        .hidden { display: none; }
+        
+        input[type="file"] { margin: 20px 0; }
     </style>
 </head>
 <body>
 
-    <audio id="bgMusic" loop>
-        <source src="https://www.chosic.com/wp-content/uploads/2021/04/Rainy-Day-Piano-Version.mp3" type="audio/mpeg">
-    </audio>
-
     <div class="heart-bg" id="heartBg"></div>
 
+    <div class="photo-hanger" id="photoHanger">
+        <div class="frame">
+            <img src="https://via.placeholder.com/150?text=Your+Photo" id="myPhoto">
+        </div>
+        <div class="frame">
+            <img src="" id="userPhotoPreview">
+        </div>
+    </div>
+
     <div id="step1" class="container">
-        <div class="main-heart">🎁</div>
         <h1>Hello Love</h1>
-        <p>I have something special for you.</p>
-        <input type="text" id="userName" placeholder="What is your name?">
-        <br>
-        <button onclick="startValentine()" style="background: #ff4d6d; color: white;">Open Surprise →</button>
+        <input type="text" id="userName" placeholder="Your name?">
+        <button onclick="start()" style="background: #ff4d6d; color: white;">Next</button>
     </div>
 
     <div id="step2" class="container hidden">
-        <div class="main-heart">💖</div>
-        <h1 id="questionTitle">Wait!</h1>
-        <p id="surpriseLine" style="font-weight: bold; color: #ff4d6d;"></p>
+        <h1 id="title"></h1>
         <p>Will you be my Valentine?</p>
         <div class="btn-container">
-            <button id="yesBtn" onclick="showFinal()">YES!</button>
+            <button id="yesBtn" onclick="askForPhoto()">YES!</button>
             <button id="noBtn" onclick="shrinkNo()">No</button>
         </div>
     </div>
 
     <div id="step3" class="container hidden">
-        <div class="main-heart">🎉</div>
-        <h1 style="font-size: 3rem;">YAY! 🥰</h1>
-        <p id="finalMsg"></p>
-        <button onclick="sendWhatsApp()" style="background: #25D366; color: white; width: 100%; padding: 20px; font-size: 1.2rem;">
-            Ohh yeah 💌
-        </button>
+        <h1>One last thing...</h1>
+        <p>Upload a photo of yourself for the surprise!</p>
+        <input type="file" id="photoInput" accept="image/*">
+        <br>
+        <button onclick="finishReveal()" style="background: #ff4d6d; color: white;">Create Our Memory ✨</button>
+    </div>
+
+    <div id="step4" class="container hidden" style="margin-top: 200px;">
+        <h1 style="font-size: 3rem;">It's Official!</h1>
+        <p style="font-size: 1.5rem; color: #ff4d6d; font-weight: bold;">We are now in a relationship ❤️</p>
+        <button onclick="makeCall()" style="background: #25D366; color: white; width: 100%; padding: 15px;">Call Me Now 📞</button>
     </div>
 
     <script>
-        let userName = "";
         let noCount = 0;
-        let yesScale = 1;
-        let noScale = 1;
+        const myPhoneNumber = "1234567890"; // CHANGE THIS LINE
+        const myPhotoURL = "https://your-image-link.com/photo.jpg"; // CHANGE THIS TO YOUR PHOTO
 
-        // --- EDIT YOUR NUMBER HERE ---
-        const myPhoneNumber = "919479851832"; 
+        function start() {
+            const name = document.getElementById('userName').value;
+            if(!name) return alert("Name please!");
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+            document.getElementById('title').innerText = `${name}, you need to answer to get the surprise!`;
+            document.getElementById('myPhoto').src = myPhotoURL;
+        }
 
-        const noPhrases = [
-            "No", "Are you sure?", "Really??", "Think again!", 
-            "Give it a chance!", "Don't be like that!", "Heartbroken... 💔", 
-            "I'm gonna cry...", "Still no?", "You're testing me!",
-            "Almost there...", "Just click Yes already!"
-        ];
+        function shrinkNo() {
+            noCount++;
+            const yes = document.getElementById('yesBtn');
+            const no = document.getElementById('noBtn');
+            yes.style.transform = `scale(${1 + noCount * 0.5})`;
+            no.style.transform = `scale(${1 - noCount * 0.08})`;
+            if(noCount >= 12) no.style.display = 'none';
+        }
+
+        function askForPhoto() {
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.remove('hidden');
+        }
+
+        function finishReveal() {
+            const file = document.getElementById('photoInput').files[0];
+            if(!file) return alert("Please select a photo!");
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('userPhotoPreview').src = e.target.result;
+                document.getElementById('step3').classList.add('hidden');
+                document.getElementById('step4').classList.remove('hidden');
+                document.getElementById('photoHanger').style.top = "50px"; // Drop the photos!
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function makeCall() {
+            window.location.href = `tel:${myPhoneNumber}`;
+        }
 
         // Background Hearts
         const heartBg = document.getElementById('heartBg');
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 15; i++) {
             const heart = document.createElement('div');
             heart.classList.add('floating-heart');
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.animationDelay = Math.random() * 5 + 's';
-            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
             heartBg.appendChild(heart);
-        }
-
-        function startValentine() {
-            userName = document.getElementById('userName').value;
-            if (!userName.trim()) return alert("I need your name first! 😉");
-            
-            // Start Music
-            document.getElementById('bgMusic').play();
-
-            document.getElementById('step1').classList.add('hidden');
-            document.getElementById('step2').classList.remove('hidden');
-            document.getElementById('surpriseLine').innerText = `${userName}, you need to answer this question to get the surprise!`;
-        }
-
-        function shrinkNo() {
-            noCount++;
-            const yesBtn = document.getElementById('yesBtn');
-            const noBtn = document.getElementById('noBtn');
-
-            // Visual updates
-            yesScale += 0.55;
-            noScale -= 0.08;
-
-            yesBtn.style.transform = `scale(${yesScale})`;
-            noBtn.style.transform = `scale(${noScale})`;
-            
-            // Add shake effect
-            noBtn.classList.add('shake');
-            setTimeout(() => noBtn.classList.remove('shake'), 500);
-
-            // Change Text (Loops through 12 steps)
-            if (noCount < noPhrases.length) {
-                noBtn.innerText = noPhrases[noCount];
-            }
-
-            // At 12 clicks, No button dies
-            if (noCount >= 12) {
-                noBtn.style.opacity = '0';
-                noBtn.style.pointerEvents = 'none';
-                yesBtn.style.width = '100%';
-                yesBtn.innerText = "CLICK ME NOW! ❤️";
-            }
-        }
-
-        function showFinal() {
-            document.getElementById('step2').classList.add('hidden');
-            document.getElementById('step3').classList.remove('hidden');
-            document.body.style.backgroundColor = "#ff4d6d"; // Flash background
-            setTimeout(() => { document.body.style.backgroundColor = "#fff0f3"; }, 300);
-            
-            document.getElementById('finalMsg').innerText = 
-                `${userName}, I knew you couldn't say no! You've made me the happiest person ever. Click below for surprise!`;
-        }
-
-        function sendWhatsApp() {
-            const text = `Hey! It's ${userName}. I accepted your Valentine's request! ❤️ I love you!`;
-            window.open(`https://wa.me/${myPhoneNumber}?text=${encodeURIComponent(text)}`, '_blank');
         }
     </script>
 </body>
 </html>
-
-
