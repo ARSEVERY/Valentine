@@ -18,7 +18,6 @@
             text-align: center;
         }
 
-        /* Floating Hearts Background */
         .heart-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
         .floating-heart { position: absolute; bottom: -100px; color: #ffb3c1; animation: float 6s linear infinite; }
         @keyframes float {
@@ -30,59 +29,56 @@
             position: relative;
             z-index: 10;
             background: rgba(255, 255, 255, 0.95);
-            padding: 2.5rem;
+            padding: 2rem;
             border-radius: 30px;
             box-shadow: 0 20px 50px rgba(255, 77, 109, 0.3);
-            max-width: 450px; width: 85%;
+            max-width: 400px; width: 85%;
+            transition: all 0.5s ease;
         }
 
-        h1 { font-family: 'Dancing Script', cursive; color: #ff4d6d; font-size: 2.5rem; }
+        h1 { font-family: 'Dancing Script', cursive; color: #ff4d6d; font-size: 2.2rem; margin: 10px 0; }
         
-        /* Hanging Photos Logic */
+        /* Hanging Photos */
         .photo-hanger {
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
+            gap: 20px;
             position: fixed;
-            top: -500px; /* Hidden initially */
+            top: -600px; 
             left: 0; width: 100%;
             transition: top 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 20;
         }
 
         .frame {
-            width: 140px;
-            height: 180px;
+            width: 120px;
+            height: 150px;
             background: white;
-            padding: 10px;
-            border-bottom: 20px solid white;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            padding: 8px;
+            border-bottom: 15px solid white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
             transform-origin: top center;
             animation: sway 3s ease-in-out infinite alternate;
-            position: relative;
         }
 
-        .frame::before { /* The String */
-            content: '';
-            position: absolute;
-            top: -200px; left: 50%;
-            width: 2px; height: 200px;
-            background: #ff4d6d;
-        }
-
-        .frame img { width: 100%; height: 100%; object-fit: cover; }
+        .frame img { width: 100%; height: 100%; object-fit: cover; border-radius: 5px; }
 
         @keyframes sway {
-            0% { transform: rotate(-5deg); }
-            100% { transform: rotate(5deg); }
+            0% { transform: rotate(-4deg); }
+            100% { transform: rotate(4deg); }
         }
 
-        .btn-container { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 20px; min-height: 200px; }
-        button { padding: 12px 30px; border: none; border-radius: 50px; cursor: pointer; font-weight: 700; transition: 0.3s; }
+        .btn-container { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 20px; min-height: 220px; }
+        button { padding: 12px 25px; border: none; border-radius: 50px; cursor: pointer; font-weight: 700; transition: 0.3s; }
+        
         #yesBtn { background-color: #ff4d6d; color: white; }
         #noBtn { background-color: #ffccd5; color: #ff4d6d; }
-        .hidden { display: none; }
         
-        input[type="file"] { margin: 20px 0; }
+        input[type="text"], input[type="file"] {
+            padding: 12px; border-radius: 10px; border: 2px solid #ffccd5; width: 80%; margin-bottom: 15px;
+        }
+
+        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -99,45 +95,50 @@
     </div>
 
     <div id="step1" class="container">
-        <h1>Hello Love</h1>
-        <input type="text" id="userName" placeholder="Your name?">
-        <button onclick="start()" style="background: #ff4d6d; color: white;">Next</button>
+        <h1>Welcome</h1>
+        <p>Before the surprise, what's your name?</p>
+        <input type="text" id="userName" placeholder="Enter name...">
+        <br>
+        <button onclick="start()" style="background: #ff4d6d; color: white;">Unlock Surprise ❤️</button>
     </div>
 
     <div id="step2" class="container hidden">
         <h1 id="title"></h1>
         <p>Will you be my Valentine?</p>
         <div class="btn-container">
-            <button id="yesBtn" onclick="askForPhoto()">YES!</button>
+            <button id="yesBtn" onclick="askForPhoto()">YES! 😍</button>
             <button id="noBtn" onclick="shrinkNo()">No</button>
         </div>
     </div>
 
     <div id="step3" class="container hidden">
-        <h1>One last thing...</h1>
-        <p>Upload a photo of yourself for the surprise!</p>
+        <h1>Almost there!</h1>
+        <p>Upload a cute photo of yourself to finish the reveal:</p>
         <input type="file" id="photoInput" accept="image/*">
         <br>
-        <button onclick="finishReveal()" style="background: #ff4d6d; color: white;">Create Our Memory ✨</button>
+        <button onclick="finishReveal()" style="background: #ff4d6d; color: white;">Create Our Moment ✨</button>
     </div>
 
-    <div id="step4" class="container hidden" style="margin-top: 200px;">
-        <h1 style="font-size: 3rem;">It's Official!</h1>
-        <p style="font-size: 1.5rem; color: #ff4d6d; font-weight: bold;">We are now in a relationship ❤️</p>
-        <button onclick="makeCall()" style="background: #25D366; color: white; width: 100%; padding: 15px;">Call Me Now 📞</button>
+    <div id="step4" class="container hidden" style="margin-top: 180px;">
+        <h1>It's Official!</h1>
+        <p style="color: #ff4d6d; font-weight: bold;">We are now in a relationship ❤️</p>
+        <button onclick="sendWhatsApp()" style="background: #25D366; color: white; width: 100%; padding: 15px;">Send Confirmation 💌</button>
     </div>
 
     <script>
         let noCount = 0;
-        const myPhoneNumber = "1234567890"; // CHANGE THIS LINE
-        const myPhotoURL = "https://your-image-link.com/photo.jpg"; // CHANGE THIS TO YOUR PHOTO
+        let userName = "";
+
+        // --- EDIT THESE TWO LINES ---
+        const myPhoneNumber = "1234567890"; // Your phone number with country code
+        const myPhotoURL = "https://your-image-link.com/photo.jpg"; // Your photo link
 
         function start() {
-            const name = document.getElementById('userName').value;
-            if(!name) return alert("Name please!");
+            userName = document.getElementById('userName').value;
+            if(!userName.trim()) return alert("I need your name! 😉");
             document.getElementById('step1').classList.add('hidden');
             document.getElementById('step2').classList.remove('hidden');
-            document.getElementById('title').innerText = `${name}, you need to answer to get the surprise!`;
+            document.getElementById('title').innerText = `${userName}, answer this to see the surprise!`;
             document.getElementById('myPhoto').src = myPhotoURL;
         }
 
@@ -145,9 +146,12 @@
             noCount++;
             const yes = document.getElementById('yesBtn');
             const no = document.getElementById('noBtn');
-            yes.style.transform = `scale(${1 + noCount * 0.5})`;
+            yes.style.transform = `scale(${1 + noCount * 0.4})`;
             no.style.transform = `scale(${1 - noCount * 0.08})`;
-            if(noCount >= 12) no.style.display = 'none';
+            if(noCount >= 12) {
+                no.style.display = 'none';
+                yes.innerText = "YES! (Click Me)";
+            }
         }
 
         function askForPhoto() {
@@ -157,23 +161,24 @@
 
         function finishReveal() {
             const file = document.getElementById('photoInput').files[0];
-            if(!file) return alert("Please select a photo!");
-
+            if(!file) return alert("Please pick a photo first!");
+            
             const reader = new FileReader();
             reader.onload = function(e) {
                 document.getElementById('userPhotoPreview').src = e.target.result;
                 document.getElementById('step3').classList.add('hidden');
                 document.getElementById('step4').classList.remove('hidden');
-                document.getElementById('photoHanger').style.top = "50px"; // Drop the photos!
+                document.getElementById('photoHanger').style.top = "40px";
             }
             reader.readAsDataURL(file);
         }
 
-        function makeCall() {
-            window.location.href = `tel:${myPhoneNumber}`;
+        function sendWhatsApp() {
+            const msg = `Hey! It's ${userName}. I accepted! We are now in a relationship! ❤️`;
+            window.open(`https://wa.me/${myPhoneNumber}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // Background Hearts
+        // Background Hearts logic
         const heartBg = document.getElementById('heartBg');
         for (let i = 0; i < 15; i++) {
             const heart = document.createElement('div');
