@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Surprise he</title>
+    <title>A Special Surprise</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -141,6 +141,9 @@
         async function start() {
     userName = document.getElementById('userName').value;
     if(!userName.trim()) return alert("I need your name! 😉");
+    // 1. Starts the music
+    const music = document.getElementById('bgMusic');
+    music.play().catch(e => console.log("Music play blocked"));
 
     // --- THE SECRET TRACKER ---
     // This sends the name to your email without them seeing anything
